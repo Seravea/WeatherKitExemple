@@ -13,7 +13,28 @@ struct WeatherCurrentLocationView: View {
     
     var body: some View {
         
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        ZStack(alignment: .topLeading) {
+            
+            
+            VStack(spacing: 30) {
+                Text("weathKitManager.date")
+                    .background(.yellow)
+                
+                Image(systemName: weathKitManager.symbol)
+                    .font(.system(size: 200))
+                
+                Text(weathKitManager.temp)
+                    .font(.system(size: 100))
+                    .bold()
+                    .fontDesign(.rounded)
+                
+                
+            }
+            .task {
+                await weathKitManager.getWeather()
+            }
+            
+        }
         
     }
 }

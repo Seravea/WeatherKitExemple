@@ -7,7 +7,7 @@
 
     import Foundation
     import WeatherKit
-    import MapKit
+    import CoreLocation
 
    @MainActor class WeatherKitManager: ObservableObject {
         @Published var weather: Weather?
@@ -21,6 +21,13 @@
             
             return convertTemp ?? "Loading weather data..."
         }
+       
+       var date: String {
+           let dateFormater = DateFormatter()
+           let date: Date = Date()
+           return dateFormater.string(from: date)
+           
+       }
         
         @Published var errorMessage: String?
         
@@ -41,7 +48,7 @@
                     return try await WeatherService.shared.weather(for: userLocation)  // Coordinates for Apple Park just as example coordinates
                 }.value
             } catch {
-                errorMessage = "Can't get the weather on the location : \(userLocation)"
+                errorMessage = "Can't get the weather on the location : \(userLocation)\n \(error)"
             }
         }
     }
