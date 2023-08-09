@@ -11,7 +11,7 @@ import SwiftUI
 struct NewAppTestAPICallApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            WeatherCurrentLocationView()
         }
     }
 }
