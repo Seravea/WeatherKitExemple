@@ -37,20 +37,15 @@
     extension WeatherKitManager {
         
         
-        func getWeather() async {
-            
-            let userLocation: CLLocation = CLLocation(latitude: 37.322998, longitude: -122.032181)
-            
-            // TO DO Get the user's for the paramater "for" on the WeatherService.shared
-            
-            do {
-                weather = try await Task.detached(priority: .userInitiated) {
-                    return try await WeatherService.shared.weather(for: userLocation)  // Coordinates for Apple Park just as example coordinates
-                }.value
-            } catch {
-                errorMessage = "Can't get the weather on the location : \(userLocation)\n \(error)"
+        func getWeather(latitude: Double, longitude: Double) async {
+                do {
+                    weather = try await Task.detached(priority: .userInitiated) {
+                        return try await WeatherService.shared.weather(for: .init(latitude: latitude, longitude: longitude))
+                    }.value
+                } catch {
+                    fatalError("\(error)")
+                }
             }
-        }
     }
 
 
