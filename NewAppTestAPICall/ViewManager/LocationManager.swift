@@ -10,8 +10,12 @@ import CoreLocation
 
 
 class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegate {
+    
     var locationManager = CLLocationManager()
+    
     @Published var authorizationStatus: CLAuthorizationStatus?
+    @Published var isAlertOn: Bool = false
+    @Published var alertMessage: String = "No location found"
     
     var latitude: Double {
         locationManager.location?.coordinate.latitude ?? 0.0
@@ -63,5 +67,36 @@ class LocationDataManager : NSObject, ObservableObject, CLLocationManagerDelegat
     }
     
     
+    func lookUpCurrentLocation(completionHandler: @escaping (CLPlacemark?) -> Void ) {
+        // Use the last reported location.
+        if let lastLocation = self.locationManager.location {
+            let geocoder = CLGeocoder()
+                
+            // Look up the location and pass it to the completion handler
+            geocoder.reverseGeocodeLocation(lastLocation,
+                        completionHandler: { (placemarks, error) in
+                if error == nil {
+                    let firstLocation = placemarks?[0]
+                    completionHandler(firstLocation)
+                }
+                else {
+               
+                    self.alertMessage = "An error occurred during searching your position City Name"
+                    self.isAlertOn = true
+                    completionHandler(nil)
+                }
+            })
+        }
+        else {
+            // No location was available.
+            self.alertMessage = "No location found, please retry with location enabled"
+            self.isAlertOn = true
+            completionHandler(nil)
+        }
+    }
+    
+    
 }
+
+
 

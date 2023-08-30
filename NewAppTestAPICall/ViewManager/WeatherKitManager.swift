@@ -8,6 +8,7 @@
     import Foundation
     import WeatherKit
     import CoreLocation
+    import SwiftUI
 
    @MainActor class WeatherKitManager: ObservableObject {
         @Published var weather: Weather?
@@ -47,5 +48,39 @@
                 }
             }
     }
+
+extension WeatherKitManager {
+    
+    func symbolColor() -> Color {
+        let symbolName = weather?.currentWeather.symbolName ?? "xmark"
+        
+        if symbolName.contains("sun") {
+            return .yellow
+        } else if symbolName.contains("cloud") {
+            return .gray
+        }else {
+            return .black
+        }
+    }
+    
+    func backgroundImage() -> String {
+        
+        let tempSymbol = weather?.currentWeather.symbolName
+        
+        if let tempSymbol = tempSymbol {
+        
+            if tempSymbol.contains("sun") {
+                return "backgroundBlueSky"
+            } else {
+                return "backgroundGraySky"
+            }
+            
+        } else {
+            
+            return "backgroundGraySky"
+            
+        }
+    }
+}
 
 
